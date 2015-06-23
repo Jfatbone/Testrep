@@ -11,6 +11,8 @@ $(document).ready(function(){
   //---fyll i canvas
   var canvas= $("#thecanvas")[0];
   var ctx= canvas.getContext("2d");
+  var startx=0;
+  var starty=900;
   var bollx=0;
   var bolly=900;
   var bollvelocityX=25;
@@ -41,26 +43,57 @@ function rita(){
     bollx=bollx+bollvelocityX;
     bolly=bolly+bollvelocityY;
 
-   if (bolly>=920 || bollx>=520){bolly=900; bollx=0; bollvelocityY=parseInt($("#inputVelY").val())}
+   if (bolly>=920 || bollx>=520){
+     bolly=starty;
+     bollx=startx;
+     bollvelocityY=parseInt($("#inputVelY").val());
+   }
   }
 
   $("#inputVelY").focusout(function(){
     bollvelocityY=parseInt($("#inputVelY").val());
-    bolly=900;
-    bollx=0;
+    bolly=starty;
+    bollx=startx;
   });
   $("#inputVelX").focusout(function(){
     bollvelocityX=parseInt($("#inputVelX").val());
-    bolly=900;
-    bollx=0;
+    bolly=starty;
+    bollx=startx;
+  });
+  $("#btnLeft").click(function(){
+    if (startx>=0){
+      startx=startx-100;
+      bolly=starty;
+    }
+    return false;
+  });
+  $("#btnRight").click(function(){
+    if (startx<=500){
+      startx=startx+100;
+      bolly=starty;
+    }
+    return false;
+  });
+  $("#btnStart").click(function(){
+    gameticker=setInterval(function(){ rita(); },50);
+    return false;
+  });
+  $("#btnStop").click(function(){
+    clearTimeout(gameticker);
+    return false;
   });
 });
+
 
 
 </script>
 <body>
   <canvas id="thecanvas" width="500" height="900"></canvas>
   <div>
+    <input id='btnLeft' type='submit' value='<'/>
+    <input id='btnRight' type='submit' value='>'/>
+    <input id='btnStart' type='submit' value='Go'>
+    <input id='btnStop' type='submit' value='Stop'><br/>
     Y-hastighet: <input id='inputVelY' type='text' value='-90'/><br/>
     X-hastighet: <input id='inputVelX' type='text' value='25'/>
   </div>
