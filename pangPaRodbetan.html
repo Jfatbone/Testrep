@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>HTML5 Pang på rödbetan</title>
+<meta charset="utf-8">
+<style type="text/css">
+</style>
+<!-- Jquery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+  //---fyll i canvas
+  var canvas= $("#thecanvas")[0];
+  var ctx= canvas.getContext("2d");
+  var bollx=0;
+  var bolly=900;
+  var bollvelocityX=25;
+  var bollvelocityY=-90;
+  var gravity=6;
+
+  gameticker=setInterval(function(){ rita(); },50);
+  
+function rita(){
+    //--Clear the canvas
+    ctx.clearRect(0,0,$("#thecanvas").width(),$("#thecanvas").height());    
+
+    //--Background
+    ctx.fillStyle="#1E90FF";
+    ctx.fillRect(0,0,$("#thecanvas").width(),$("#thecanvas").height());
+
+    //--Boll
+    ctx.beginPath();
+    ctx.arc(bollx,bolly,10,0,2*Math.PI);
+    ctx.fillStyle="red";
+    ctx.fill();
+    ctx.stroke();
+    
+    //--acceleration pga gravitation
+    bollvelocityY=bollvelocityY+gravity;
+
+    //--New bollpos = old bollpos+ hastighet i pixlar/gametick
+    bollx=bollx+bollvelocityX;
+    bolly=bolly+bollvelocityY;
+
+   if (bolly>=920 || bollx>=520){bolly=900; bollx=0; bollvelocityY=parseInt($("#inputVelY").val())}
+  }
+
+  $("#inputVelY").focusout(function(){
+    bollvelocityY=parseInt($("#inputVelY").val());
+    bolly=900;
+    bollx=0;
+  });
+  $("#inputVelX").focusout(function(){
+    bollvelocityX=parseInt($("#inputVelX").val());
+    bolly=900;
+    bollx=0;
+  });
+});
+
+
+</script>
+<body>
+  <canvas id="thecanvas" width="500" height="900"></canvas>
+  <div>
+    Y-hastighet: <input id='inputVelY' type='text' value='-90'/><br/>
+    X-hastighet: <input id='inputVelX' type='text' value='25'/>
+  </div>
+</body>
