@@ -13,12 +13,14 @@ $(document).ready(function(){
   var ctx= canvas.getContext("2d");
   var startx=0;
   var starty=900;
+  
   var bollx=0;
   var bolly=900;
-  var bollvelocityX=25;
-  var bollvelocityY=-90;
+  var bollvelocityX=0;
+  var bollvelocityY=0;
   var gravity=6;
 
+  calcNewVelocity();
   gameticker=setInterval(function(){ rita(); },50);
   
 function rita(){
@@ -43,23 +45,18 @@ function rita(){
     bollx=bollx+bollvelocityX;
     bolly=bolly+bollvelocityY;
 
+   //--Kontrollera om kast är animerat klart
    if (bolly>=920 || bollx>=520){
-     bolly=starty;
-     bollx=startx;
-     bollvelocityY=parseInt($("#inputVelY").val());
+     resetThrow();
    }
   }
 
-  $("#inputVelY").focusout(function(){
-    bollvelocityY=parseInt($("#inputVelY").val());
+  function resetThrow(){
     bolly=starty;
     bollx=startx;
-  });
-  $("#inputVelX").focusout(function(){
-    bollvelocityX=parseInt($("#inputVelX").val());
-    bolly=starty;
-    bollx=startx;
-  });
+    calcNewVelocity();
+  }
+
   $("#btnLeft").click(function(){
     if (startx>=0){
       startx=startx-100;
@@ -75,6 +72,7 @@ function rita(){
     return false;
   });
   $("#btnStart").click(function(){
+    resetThrow();
     gameticker=setInterval(function(){ rita(); },50);
     return false;
   });
@@ -82,6 +80,11 @@ function rita(){
     clearTimeout(gameticker);
     return false;
   });
+
+  function calcNewVelocity(){
+    bollvelocityY=Math.round(Math.sin(($("#inputVinkel").val()*Math.PI)/180)*$("#inputVelocity").val())*-1;
+    bollvelocityX=Math.round(Math.cos(($("#inputVinkel").val()*Math.PI)/180)*$("#inputVelocity").val());
+  }
 });
 
 
@@ -94,7 +97,7 @@ function rita(){
     <input id='btnRight' type='submit' value='>'/>
     <input id='btnStart' type='submit' value='Go'>
     <input id='btnStop' type='submit' value='Stop'><br/>
-    Y-hastighet: <input id='inputVelY' type='text' value='-90'/><br/>
-    X-hastighet: <input id='inputVelX' type='text' value='25'/>
+    Hastighet: <input id='inputVelocity' type='text' value='80'/><br/>
+    Vinkel: <input id='inputVinkel' type='text' value='78'/>
   </div>
 </body>
