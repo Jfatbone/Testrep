@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>HTML5 Pang på rödbetan</title>
+<title>HTML5 Pang pa rodbetan</title>
 <meta charset="utf-8">
 <style type="text/css">
 </style>
@@ -13,7 +13,7 @@ $(document).ready(function(){
   var ctx= canvas.getContext("2d");
   var startx=0;
   var starty=900;
-  
+
   var bollx=0;
   var bolly=900;
   var bollvelocityX=0;
@@ -22,10 +22,10 @@ $(document).ready(function(){
 
   calcNewVelocity();
   gameticker=setInterval(function(){ rita(); },50);
-  
+
 function rita(){
     //--Clear the canvas
-    ctx.clearRect(0,0,$("#thecanvas").width(),$("#thecanvas").height());    
+    ctx.clearRect(0,0,$("#thecanvas").width(),$("#thecanvas").height());
 
     //--Background
     ctx.fillStyle="#1E90FF";
@@ -37,18 +37,21 @@ function rita(){
     ctx.fillStyle="red";
     ctx.fill();
     ctx.stroke();
-    
+
     //--acceleration pga gravitation
     bollvelocityY=bollvelocityY+gravity;
 
-    //--New bollpos = old bollpos+ hastighet i pixlar/gametick
-    bollx=bollx+bollvelocityX;
-    bolly=bolly+bollvelocityY;
+    //--New bollpos
+    bollx=bollx+bollvelocityX*0.5;
+    bolly=bolly+bollvelocityY*0.5;
 
-   //--Kontrollera om kast är animerat klart
-   if (bolly>=920 || bollx>=520){
+   //--Kontrollera om kast ar animerat klart
+   if (bolly>=920){
+     //clearTimeout(gameticker)
      resetThrow();
    }
+  else if (bollx>=500 || bollx<=0)
+    bollvelocityX=bollvelocityX*-1;
   }
 
   function resetThrow(){
